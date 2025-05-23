@@ -56,7 +56,7 @@ Buka `http://localhost:3000` untuk menggunakan aplikasinya.
 
 ## 📁 Struktur Proyek
 
-\`\`\`
+```
 .
 ├── public/
 │   └── index.html         # Halaman frontend
@@ -64,7 +64,7 @@ Buka `http://localhost:3000` untuk menggunakan aplikasinya.
 ├── .env                   # Variabel lingkungan
 ├── package.json
 └── README.md
-\`\`\`
+```
 
 ---
 
