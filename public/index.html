@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Judge Sederhana</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 10px;
+        }
+
+        select,
+        button {
+            padding: 8px;
+            margin-top: 10px;
+        }
+
+        pre {
+            background: #f0f0f0;
+            padding: 10px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🧑‍💻 Online Judge Sederhana</h1>
+    <form id="judge-form">
+        <label>Bahasa Pemrograman:</label><br />
+        <select id="language">
+            <option value="71">Python 3</option>
+            <option value="54">C++</option>
+            <option value="62">Java</option>
+            <option value="63">JavaScript</option>
+        </select><br /><br />
+
+        <label>Kode:</label><br />
+        <textarea id="code" placeholder="Tulis kode di sini...">print("Hello, CPC!")</textarea><br />
+
+        <!-- <label>Input (Opsional):</label><br />
+    <textarea id="stdin" placeholder="Input untuk program..."></textarea><br /> -->
+
+        <label>Expected Output:</label><br />
+        <textarea id="expected" placeholder="Output yang benar...">Hello, CPC!</textarea><br />
+
+        <button type="submit">Jalankan</button>
+    </form>
+
+    <h3>Hasil Eksekusi:</h3>
+    <pre id="output">Belum dijalankan.</pre>
+
+    <script>
+        const form = document.getElementById("judge-form");
+        const output = document.getElementById("output");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            output.textContent = "Menjalankan kode...";
+
+            const source_code = document.getElementById("code").value;
+            const language_id = document.getElementById("language").value;
+            const expected_output = document.getElementById("expected").value.trim();
+
+            const response = await fetch("/api/judge", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ source_code, language_id }),
+            });
+
+            const result = await response.json();
+            const actual_output = (result.stdout || result.stderr || result.compile_output || "").trim();
+
+            let validation = "";
+            if (!actual_output) {
+                validation = "⚠️ Tidak ada output.";
+            } else if (actual_output === expected_output) {
+                validation = "✅ Output BENAR!";
+            } else {
+                validation = "❌ Output SALAH!";
+            }
+
+            output.textContent = `👉 Output Peserta:
+${actual_output}
+
+📝 Expected Output:
+${expected_output}
+
+🔎 Validasi:
+${validation}`;
+        });
+    </script>
+</body>
+
+</html>
